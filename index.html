@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CYBERKORE-98</title>
+    <style>
+        /* ============== CORE SYSTEM VARIABLES ============== */
+        :root {
+            --color-toxic: #9EB356;      /* dingy green */
+            --color-waste: #8B4513;      /* brown */
+            --color-warning: #FFD700;    /* bright yellow */
+            --color-terminal: #FFFF00;   /* terminal yellow */
+            --color-void: #111111;       /* near black */
+            --color-danger: #ff3300;     /* danger red */
+            --color-neon: #00ff99;       /* neon accent */
+            --color-dead: #555555;       /* dead gray */
+            --font-system: "Courier New", Courier, monospace;
+            --border-weight: 3px;
+            --border-style: ridge;
+            --layer-depth-1: 1;
+            --layer-depth-2: 2;
+            --layer-depth-3: 3;
+            --layer-depth-4: 4;
+            --layer-depth-5: 5;
+        }
+
+        /* ============== SYSTEM INITIALIZATION ============== */
+        @font-face {
+            font-family: "VT323";
+            src: url("https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJU.woff2") format("woff2");
+        }
+
+        body {
+            background-color: var(--color-void);
+            color: var(--color-terminal);
+            font-family: var(--font-system);
+            margin: 0;
+            padding: 0;
+            background-image: url('/api/placeholder/100/100');
+            cursor: url('data:image/png;base64,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'), auto;
+            overflow-x: hidden;
+        }
+
+        /* ============== ANIMATION KEYFRAMES ============== */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(0px) }
+            100% { transform: translateY(100vh) }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ============== CONTAINER FRAMEWORKS ============== */
+        .page-container {
+            width: 90%;
+            max-width: 950px;
+            margin: 20px auto;
+            border: var(--border-weight) var(--border-style) var(--color-warning);
+            background-color: var(--color-waste);
+            box-shadow: 0 0 15px var(--color-toxic), 
+                        0 0 25px rgba(158, 179, 86, 0.3),
+                        0 0 35px rgba(158, 179, 86, 0.2);
+            padding: 5px;
+            position: relative;
+            z-index: var(--layer-depth-1);
+        }
+
+        .page-container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px dashed var(--color-neon);
+            z-index: -1;
+            pointer-events: none;
+            animation: pulse 4s infinite;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0.3;
+            z-index: 9999;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        .header {
+            background-color: var(--color-waste);
+            background-image: url('/api/placeholder/800/100');
+            background-size: cover;
+            color: var(--color-terminal);
+            padding: 15px;
+            text-align: center;
+            border: var(--border-weight) var(--border-style) var(--color-warning);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px var(--color-void);
+            position: relative;
+            z-index: var(--layer-depth-2);
+        }
+
+        .header h1 {
+            position: relative;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        .header h1::before {
+            content: "ACCESS GRANTED";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: var(--color-neon);
+            animation: blink 2s infinite;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite;
+            animation-play-state: paused;
+        }
+
+        .header:hover .glitch {
+            animation-play-state: running;
+        }
+
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+            border: 1px solid var(--color-warning);
+            background-color: var(--color-void);
+            padding: 5px;
+            position: relative;
+        }
+
+        .marquee::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--color-void), var(--color-neon), var(--color-void));
+            z-index: var(--layer-depth-3);
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+
+        .content-area {
+            display: flex;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        /* ============== SIDEBAR STYLING ============== */
+        .sidebar {
+            width: 25%;
+            min-width: 180px;
+            background-color: var(--color-waste);
+            background-image: url('/api/placeholder/200/200');
+            border: var(--border-weight) var(--border-style) var(--color-warning);
+            padding: 10px;
+            margin-right: 10px;
+            position: relative;
+            z-index: var(--layer-depth-2);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sidebar-item {
+            margin-bottom: 15px;
+            border: 1px solid var(--color-terminal);
+            padding: 5px;
+            background-color: rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            transform: translateX(3px);
+            box-shadow: -3px 0 0 var(--color-neon);
+        }
+
+        .sidebar-item a {
+            color: var(--color-terminal);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .sidebar-item a:hover {
+            color: var(--color-neon);
+            transform: translateX(5px);
+        }
+
+        .sidebar-item a:hover::before {
+            content: ">>";
+            position: absolute;
+            left: -20px;
+            animation: blink 1s infinite;
+        }
+
+        .main-content {
+            flex: 1;
+            background-color: var(--color-waste);
+            background-image: url('/api/placeholder/400/400');
+            background-blend-mode: overlay;
+            opacity: 0.9;
+            border: var(--border-weight) var(--border-style) var(--color-warning);
+            padding: 10px;
+            position: relative;
+            z-index: var(--layer-depth-2);
+        }
+
+        .main-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: var(--layer-depth-1);
+        }
+
+        /* ============== TAB SYSTEM ============== */
+        .tab-container {
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .tab-buttons {
+            display: flex;
+            overflow-x: auto;
+            position: relative;
+            z-index: var(--layer-depth-3);
+        }
+
+        .tab-buttons::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--color-warning);
+        }
+
+        .tab-button {
+            padding: 5px 10px;
+            background-color: var(--color-waste);
+            border: 1px solid var(--color-warning);
+            border-bottom: none;
+            margin-right: 2px;
+            cursor: url('data:image/png;base64,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'), auto;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: var(--layer-depth-2);
+        }
+
+        .tab-button:hover {
+            background-color: var(--color-toxic);
+            color: var(--color-void);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background-color: var(--color-toxic);
+            color: var(--color-void);
+            font-weight: bold;
+            transform: translateY(-2px);
+            box-shadow: 0 -2px 5px rgba(158, 179, 86, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.7);
+            border: 1px solid var(--color-warning);
+            position: relative;
+            z-index: var(--layer-depth-2);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fade-in 0.3s ease;
+        }
+
+        /* ============== EXPANDED TAB SYSTEM ============== */
+        .mega-tabs {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .mega-tab-buttons {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px dashed var(--color-warning);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .mega-tab-button {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            background-color: var(--color-void);
+            border: 1px solid var(--color-terminal);
+            margin: 0 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mega-tab-button:hover {
+            background-color: var(--color-waste);
+            transform: translateY(-3px);
+        }
+
+        .mega-tab-button.active {
+            background-color: var(--color-toxic);
+            color: var(--color-void);
+            border-color: var(--color-warning);
+            transform: translateY(-3px);
+        }
+
+        .mega-tab-content {
+            display: none;
+            background-color: rgba(0,0,0,0.4);
+            border: 1px solid var(--color-terminal);
+            padding: 15px;
+        }
+
+        .mega-tab-content.active {
+            display: block;
+            animation: fade-in 0.4s ease;
+        }
+
+        /* ============== WIDGETS AND UTILITIES ============== */
+        .scrollbox {
+            height: 100px;
+            overflow-y: auto;
+            border: 1px solid var(--color-terminal);
+            padding: 5px;
+            background-color: rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .scrollbox::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .scrollbox::-webkit-scrollbar-track {
+            background: var(--color-void);
+        }
+
+        .scrollbox::-webkit-scrollbar-thumb {
+            background: var(--color-toxic);
+            border: 1px solid var(--color-warning);
+        }
+
+        .counter {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: var(--color-void);
+            border: 1px solid var(--color-warning);
+            position: relative;
+        }
+
+        .counter::before {
+            content: "SYSTEM STATS";
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-void);
+            padding: 0 5px;
+            font-size: 8px;
+            color: var(--color-neon);
+        }
+
+        .three-container {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            border: 1px solid var(--color-terminal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .three-container::after {
+            content: "ACCESSING NEURAL INTERFACE";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 10px;
+            color: var(--color-neon);
+            animation: blink 2s infinite;
+            pointer-events: none;
+        }
+
+        /* ============== PROFILE SECTION ============== */
+        .profile-section {
+            margin: 20px 0;
+            border: 2px solid var(--color-warning);
+            background-color: rgba(0,0,0,0.6);
+            padding: 15px;
+            position: relative;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--color-toxic);
+            padding-bottom: 10px;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--color-warning);
+            margin-right: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(158, 179, 86, 0.2), transparent);
+            z-index: var(--layer-depth-3);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h3 {
+            margin: 0 0 5px 0;
+            color: var(--color-neon);
+        }
+
+        .profile-status {
+            font-size: 12px;
+            color: var(--color-terminal);
+            margin-top: 5px;
+            animation: blink 3s infinite;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 5px;
+            background-color: var(--color-void);
+            border: 1px solid var(--color-terminal);
+            flex: 1;
+            margin: 0 2px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            color: var(--color-warning);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--color-dead);
+        }
+
+        /* ============== COLLAPSIBLE PANELS ============== */
+        .collapsible {
+            margin: 10px 0;
+        }
+
+        .collapsible-header {
+            background-color: var(--color-waste);
+            border: 1px solid var(--color-terminal);
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .collapsible-header:hover {
+            background-color: var(--color-toxic);
+            color: var(--color-void);
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid var(--color-terminal);
+            border-top: none;
+            background-color: rgba(0,0,0,0.5);
+            animation: fade-in 0.3s ease;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .collapsible-icon {
+            transform: rotate(90deg);
+        }
+
+        /* ============== POPUP SYSTEM ============== */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .popup-container {
+            background-color: var(--color-waste);
+            border: 3px solid var(--color-warning);
+            box-shadow: 0 0 20px var(--color-toxic);
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            animation: fade-in 0.3s ease;
+        }
+
+        .popup-header {
+            background-color: var(--color-void);
+            color: var(--color-terminal);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-warning);
+        }
+
+        .popup-title {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            color: var(--color-terminal);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .popup-content {
+            padding: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .popup-button {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--color-void);
+            border: 1px solid var(--color-terminal);
+            color: var(--color-terminal);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-button:hover {
+            background-color: var(--color-toxic);
+            color: var(--color-void);
+            border-color: var(--color-warning);
+        }
+
+        /* ============== UTILITY CLASSES ============== */
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            line-height: 1.2;
+            font-size: 10px;
+            color: var(--color-terminal);
+            background-color: var(--color-void);
+            padding: 10px;
+            border: 1px solid var(--color-warning);
+            position: relative;
+        }
+
+        .ascii-art::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0) 5px,
+                rgba(0, 0, 0, 0.1) 5px,
+                rgba(0, 0, 0, 0.1) 6px
+            );
+            pointer-events: none;
+        }
+
+        .glow {
+            text-shadow: 0 0 5px var(--color-terminal),
+                         0 0 10px var(--color-toxic);
+        }
+
+        .rotate {
+            animation: rotate 10s linear infinite;
+        }
+
+        .fade-in {
+            animation: fade-in 0.5s ease;
+        }
+
+        /* ============== FOOTER ============== */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            border-top: var(--border-weight) var(--border-style) var(--color-warning);
+            font-size: 12px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-neon), transparent);
+        }
+
+        /* ============== IFRAME STYLING ============== */
+        .iframe-container {
+            width: 100%;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .iframe-container::before {
+            content: "EXTERNAL FEED";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background-color: var(--color-void);
+            color: var(--color-neon);
+            font-size: 10px;
+            padding: 2px 5px;
+            z-index: var(--layer-depth-3);
+        }
+
+        iframe {
+            width: 100%;
+            height: 150px;
+            border: 1px solid var(--color-terminal);
+            background-color: var(--color-void);
+            transition: all 0.3s ease;
+        }
+
+        iframe:hover {
+            border-color: var(--color-neon);
+            box-shadow: 0 0 10px rgba(158, 179, 86, 0.3);
+        }
+
+        /* ============== RESPONSIVE DESIGN ============== */
+        @media (max-width: 768px) {
+            .content-area {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                min-width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .mega-tab-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .mega-tab-button {
+                flex: 0 0 48%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scanline Effect -->
+    <div class="scanline"></div>
+
+    <!-- Main Container -->
+    <div class="page-container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1><span class="blink">[</span> <span class="glitch">TITLE HERE</span> <span class="blink">]</span></h1>
+            <div class="marquee">
+                <span>SCROLLING TEXT HERE - REPLACE WITH YOUR ANNOUNCEMENTS OR MANIFESTOS - THE SYSTEM WATCHES - DATA IS ETERNAL - REPEAT INFINITELY - </span>
+            </div>
+        </div>
+
+        <!-- Content Area with Sidebar and Main Content -->
+        <div class="content-area">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-item">
+                    <h3 class="glow">> NAVIGATION</h3>
+                    <ul>
+                        <li><a href="#">LINK 1</a></li>
+                        <li><a href="#">LINK 2</a></li>
+                        <li><a href="#">LINK 3</a></li>
+                        <li><a href="#">LINK 4</a></li>
+                        <li><a href="#" class="popup-trigger" data-popup="secret">SECRET</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-item">
+                    <h3 class="glow">> WIDGET HERE</h3>
+                    <div class="scrollbox">
+                        SCROLLBOX CONTENT HERE. Add your updates, news, or whatever content you want to be scrollable.
+                        <br><br>
+                        More content to demonstrate scrolling...
+                        <br><br>
+                        Even more content...
+                    </div>
+                </div>
+
+                <div class="sidebar-item ascii-art">
+                    <!-- ASCII ART GOES HERE -->
+    .--.
+   |o_o |
+   |:_/ |
+  //   \ \
+ (|     | )
+/'\_   _/`\
+\___)=(___/
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header">
+                        <span>> COLLAPSED CONTENT</span>
+                        <span class="collapsible-icon">▶</span>
+                    </div>
+                    <div class="collapsible-content">
+                        Hidden content here. This area can be used for anything that should be hidden by default.
+                    </div>
+                </div>
+
+                <div class="counter">
+                    <span>VISITORS: 01337</span><br>
+                    <span>LAST UPDATED: XX/XX/XXXX</span>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <h2 class="glow">> MAIN CONTENT HEADER</h2>
+                <p>MAIN CONTENT HERE. Replace this with your primary content.</p>
+
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-pic">
+                            <img src="/api/placeholder/80/80" alt="Profile Picture">
+                        </div>
+                        <div class="profile-info">
+                            <h3>USER_PROFILE_NAME</h3>
+                            <div>STATUS: <span class="profile-status">ONLINE</span></div>
+                            <div style="font-size: 12px; color: var(--color-dead);">User Bio Here - Replace with your personal information or manifesto.</div>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">POSTS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1337</div>
+                            <div class="stat-label">FOLLOWERS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">90%</div>
+                            <div class="stat-label">TRUST</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">∞</div>
+                            <div class="stat-label">POWER</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabbed Content System -->
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <div class="tab-button active" data-tab="tab1">TAB 1</div>
+                        <div class="tab-button" data-tab="tab2">TAB 2</div>
+                        <div class="tab-button" data-tab="tab3">TAB 3</div>
+                        <div class="tab-button" data-tab="tab4">TAB 4</div>
+                    </div>
+
+                    <div class="tab-content active" id="tab1">
+                        <h3>> TAB 1 CONTENT</h3>
+                        <p>Replace with your content for tab 1.</p>
+                        <button class="popup-button popup-trigger" data-popup="popup1">OPEN POPUP 1</button>
+                    </div>
+
+                    <div class="tab-content" id="tab2">
+                        <h3>> TAB 2 CONTENT</h3>
+                        <p>Replace with your content for tab 2.</p>
+                        <div class="collapsible">
+                            <div class="collapsible-header">
+                                <span>> HIDDEN SECTION</span>
+                                <span class="collapsible-icon">▶</span>
+                            </div>
+                            <div class="collapsible-content">
+                                This collapsible content can be expanded by clicking on the header.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab3">
+                        <h3>> TAB 3 CONTENT</h3>
+                        <p>Replace with your content for tab 3.</p>
+                        <button class="popup-button popup-trigger" data-popup="popup2">OPEN POPUP 2</button>
+                    </div>
+
+                    <div class="tab-content" id="tab4">
+                        <h3>> TAB 4 CONTENT</h3>
+                        <p>Replace with your content for tab 4.</p>
+                    </div>
+                </div>
+
+                <!-- Enhanced Mega Tab System -->
+                <div class="mega-tabs">
+                    <div class="mega-tab-buttons">
+                        <div class="mega-tab-button active" data-megatab="mega1">SECTION 1</div>
+                        <div class="mega-tab-button" data-megatab="mega2">SECTION 2</div>
+                        <div class="mega-tab-button" data-megatab="mega3">SECTION 3</div>
+                        <div class="mega-tab-button" data-megatab="mega4">SECTION 4</div>
+                    </div>
+
+                    <div class="mega-tab-content active" id="mega1">
+                        <h3 class="glow">> SECTION 1 CONTENT</h3>
+                        <p>This is the content for section 1. Replace with your own content.</p>
+                    </div>
+
+                    <div class="mega-tab-content" id="mega2">
+                        <h3 class="glow">> SECTION 2 CONTENT</h3>
+                        <p>This is the content for section 2. Replace with your own content.</p>
+                    </div>
+
+                    <div class="mega-tab-content" id="mega3">
+                        <h3 class="glow">> SECTION 3 CONTENT</h3>
+                        <p>This is the content for section 3. Replace with your own content.</p>
+                    </div>
+
+                    <div class="mega-tab-content" id="mega4">
+                        <h3 class="glow">> SECTION 4 CONTENT</h3>
+                        <p>This is the content for section 4. Replace with your own content.</p>
+                    </div>
+                </div>
+
+                <!-- 3D Widget -->
+                <h3 class="glow">> 3D WIDGET</h3>
+                <div class="three-container" id="scene-container"></div>
+
+                <!-- iFrame Example -->
+                <h3 class="glow">> IFRAME CONTENT</h3>
+                <div class="iframe-container">
+                    <iframe src="about:blank" title="External Content"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>FOOTER TEXT HERE - © 20XX - YOUR NAME - ALL RIGHTS RESERVED - VIEW SOURCE</div>
+            <div class="counter">PAGE GENERATED IN 0.0013337 SECONDS</div>
+        </div>
+    </div>
+
+    <!-- Popup System -->
+    <div class="popup-overlay" id="popup1-overlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h3 class="popup-title">> POPUP WINDOW 1</h3>
+                <button class="popup-close">&times;</button>
+            </div>
+            <div class="popup-content">
+                <p>This is a popup window. You can put any content here.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popup2-overlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h3 class="popup-title">> POPUP WINDOW 2</h3>
+                <button class="popup-close">&times;</button>
+            </div>
+            <div class="popup-content">
+                <p>This is another popup window with different content.</p>
+                <div class="ascii-art">
+   _____                 _     _    
+  / ____|               | |   | |   
+ | |  __ _ __ ___  _ __ | |__ | | __
+ | | |_ | '__/ _ \| '_ \| '_ \| |/ /
+ | |__| | | | (_) | |_) | | | |   < 
+  \_____|_|  \___/| .__/|_| |_|_|\_\
+                  | |               
+                  |_|               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="secret-overlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h3 class="popup-title">> SECRET AREA</h3>
+                <button class="popup-close">&times;</button>
+            </div>
+            <div class="popup-content">
+                <p>You have discovered a secret area!</p>
+                <p>This could contain exclusive content, hidden links, or special features.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ============== INITIALIZATION ==============
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            initTabs();
+            
+            // Mega tabs functionality
+            initMegaTabs();
+            
+            // Collapsible panels
+            initCollapsibles();
+            
+            // Popup system
+            initPopups();
+            
+            // Initialize 3D scene
+            initThreeScene();
+            
+            // Initialize visitor counter (just for show)
+            updateCounter();
+            
+            // Add hover effects to ASCII art
+            initAsciiHover();
+        });
+
+        // ============== TAB SYSTEM FUNCTIONALITY ==============
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons and contents
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // ============== MEGA TABS FUNCTIONALITY ==============
+        function initMegaTabs() {
+            const megaTabButtons = document.querySelectorAll('.mega-tab-button');
+            
+            megaTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons and contents
+                    document.querySelectorAll('.mega-tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.mega-tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-megatab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // ============== COLLAPSIBLE PANELS ==============
+        function initCollapsibles() {
+            const collapsibles = document.querySelectorAll('.collapsible-header');
+            
+            collapsibles.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const parent = this.parentElement;
+                    
+                    // Toggle the active class on parent
+                    parent.classList.toggle('active');
+                    
+                    // Toggle display of content
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            });
+        }
+
+        // ============== POPUP SYSTEM ==============
+        function initPopups() {
+            const popupTriggers = document.querySelectorAll('.popup-trigger');
+            const popupCloseButtons = document.querySelectorAll('.popup-close');
+            const popupOverlays = document.querySelectorAll('.popup-overlay');
+            
+            // Open popups
+            popupTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function() {
+                    const popupId = this.getAttribute('data-popup');
+                    const overlay = document.getElementById(popupId + '-overlay');
+                    overlay.style.display = 'flex';
+                });
+            });
+            
+            // Close on X button
+            popupCloseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const overlay = this.closest('.popup-overlay');
+                    overlay.style.display = 'none';
+                });
+            });
+            
+            // Close on outside click
+            popupOverlays.forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // ============== ASCII ART HOVER EFFECTS ==============
+        function initAsciiHover() {
+            const asciiElements = document.querySelectorAll('.ascii-art');
+            
+            asciiElements.forEach(elem => {
+                elem.addEventListener('mouseover', function() {
+                    this.style.color = 'var(--color-neon)';
+                });
+                
+                elem.addEventListener('mouseout', function() {
+                    this.style.color = 'var(--color-terminal)';
+                });
+            });
+        }
+
+        // ============== THREE.JS 3D WIDGET ==============
+        function initThreeScene() {
+            // Create a scene
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x111111);
+            
+            // Create a camera
+            const container = document.getElementById('scene-container');
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Create a renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Create lighting
+            const ambientLight = new THREE.AmbientLight(0x333333);
+            scene.add(ambientLight);
+            
+            const pointLight = new THREE.PointLight(0xFFFF00, 1, 100);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+            
+            // Create cyberpunk objects
+            
+            // Main cube wireframe
+            const mainGeometry = new THREE.BoxGeometry(2, 2, 2);
+            const edges = new THREE.EdgesGeometry(mainGeometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffff00 }));
+            scene.add(line);
+            
+            // Inner cube wireframe
+            const innerGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const innerEdges = new THREE.EdgesGeometry(innerGeometry);
+            const innerLine = new THREE.LineSegments(innerEdges, new THREE.LineBasicMaterial({ color: 0x9EB356 }));
+            scene.add(innerLine);
+            
+            // Glowing core
+            const sphereGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+            const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x9EB356 });
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            scene.add(sphere);
+            
+            // Particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 100;
+            
+            const posArray = new Float32Array(particleCount * 3);
+            
+            for(let i = 0; i < particleCount * 3; i++) {
+                // Random positions between -5 and 5
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0xFFFF00,
+            });
+            
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Tetrahedron
+            const tetraGeometry = new THREE.TetrahedronGeometry(0.5, 0);
+            const tetraEdges = new THREE.EdgesGeometry(tetraGeometry);
+            const tetraLine = new THREE.LineSegments(tetraEdges, new THREE.LineBasicMaterial({ color: 0xff3300 }));
+            tetraLine.position.set(-1.5, 1.5, 0);
+            scene.add(tetraLine);
+            
+            // Animation function
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate the shapes
+                line.rotation.x += 0.005;
+                line.rotation.y += 0.005;
+                
+                innerLine.rotation.x -= 0.01;
+                innerLine.rotation.z += 0.01;
+                
+                sphere.rotation.y += 0.02;
+                sphere.rotation.z += 0.01;
+                
+                particlesMesh.rotation.y += 0.001;
+                
+                tetraLine.rotation.x += 0.02;
+                tetraLine.rotation.y += 0.03;
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Start animation
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+            });
+            
+            // Interactive hover effect
+            container.addEventListener('mousemove', function(event) {
+                // Get mouse position relative to container
+                const rect = container.getBoundingClientRect();
+                const mouseX = ((event.clientX - rect.left) / container.clientWidth) * 2 - 1;
+                const mouseY = -((event.clientY - rect.top) / container.clientHeight) * 2 + 1;
+                
+                // Move the point light with the mouse
+                pointLight.position.x = mouseX * 5;
+                pointLight.position.y = mouseY * 5;
+                
+                // Slightly rotate the main cube based on mouse position
+                line.rotation.x = mouseY * 0.5;
+                line.rotation.y = mouseX * 0.5;
+            });
+        }
+
+        // ============== FAKE VISITOR COUNTER ==============
+        function updateCounter() {
+            // This is just for show - replace with actual counter code if needed
+            const startCount = Math.floor(Math.random() * 10000) + 1000;
+            document.querySelectorAll('.counter span:first-child').forEach(counter => {
+                counter.textContent = 'VISITORS: ' + startCount.toString().padStart(5, '0');
+            });
+            
+            // Current date
+            const now = new Date();
+            const dateString = now.toLocaleDateString();
+            document.querySelectorAll('.counter span:last-child').forEach(counter => {
+                counter.textContent = 'LAST UPDATED: ' + dateString;
+            });
+        }
+        
+        // ============== GLITCH EFFECTS ==============
+        // Apply random glitch effects to elements with glitch class
+        setInterval(() => {
+            const glitchElements = document.querySelectorAll('.glitch');
+            glitchElements.forEach(element => {
+                if (Math.random() > 0.9) { // 10% chance to trigger glitch effect
+                    element.style.animation = 'none';
+                    void element.offsetWidth; // Trigger reflow
+                    element.style.animation = 'glitch 0.3s infinite';
+                    
+                    // Reset after short time
+                    setTimeout(() => {
+                        element.style.animation = 'none';
+                    }, 300);
+                }
+            });
+        }, 2000);
+    </script>
+</body>
+</html>
